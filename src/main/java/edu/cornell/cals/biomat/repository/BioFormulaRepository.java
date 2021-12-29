@@ -25,4 +25,6 @@ public interface BioFormulaRepository extends JpaRepository<BioFormula, Long> {
 	@Query(value="SELECT bf FROM BioFormula bf where bf.name like :search OR bf.formulaDesc like :search")
     List<BioFormula> getBioFormulaByNameOrDesc(@Param("search") String search);
 
+	@Query(value="SELECT bf FROM BioFormula bf where bf.name IN :names")         
+	List<BioFormula> getBioFormulaByNames(@Param("names") List<String> names);
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -196,16 +197,10 @@ public class BioFormulaServiceImpl implements BioFormulaService{
 
 	
 	protected List<BioFormula> getFormulas(List<String> variablesInFormula ){
-		List<BioFormula> formulaList = new ArrayList();
-		BioFormula bf =null;
-		for(String variable : variablesInFormula) {
-		if(isStringUpperCase(variable)) {
-			bf= bioFormulaRepository.getBioFormulaByName(variable);
-			if(bf!=null)		
-				formulaList.add(bf);
-		}
-		}
-		return formulaList;
+		if(variablesInFormula == null || variablesInFormula.size()==0)     
+			return new <BioFormula> ArrayList();     
+		variablesInFormula = variablesInFormula.stream().filter(variable -> isStringUpperCase(variable)).collect(Collectors.toList());     
+		return bioFormulaRepository.getBioFormulaByNames(variablesInFormula);
 	}
 
 	private static boolean isStringUpperCase(String str){ 
